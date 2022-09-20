@@ -54,6 +54,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:0.27.2"],\
             ["eslint", "npm:8.23.1"],\
             ["eslint-config-prettier", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:8.5.0"],\
+            ["eslint-plugin-prettier", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:4.2.1"],\
             ["eslint-plugin-react-hooks", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:4.6.0"],\
             ["husky", "npm:8.0.1"],\
             ["prettier", "npm:2.7.1"],\
@@ -6456,6 +6457,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:0.27.2"],\
             ["eslint", "npm:8.23.1"],\
             ["eslint-config-prettier", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:8.5.0"],\
+            ["eslint-plugin-prettier", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:4.2.1"],\
             ["eslint-plugin-react-hooks", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:4.6.0"],\
             ["husky", "npm:8.0.1"],\
             ["prettier", "npm:2.7.1"],\
@@ -9237,6 +9239,37 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["eslint-plugin-prettier", [\
+        ["npm:4.2.1", {\
+          "packageLocation": "./.yarn/cache/eslint-plugin-prettier-npm-4.2.1-ba8e1240f1-b9e839d233.zip/node_modules/eslint-plugin-prettier/",\
+          "packageDependencies": [\
+            ["eslint-plugin-prettier", "npm:4.2.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:4.2.1", {\
+          "packageLocation": "./.yarn/__virtual__/eslint-plugin-prettier-virtual-d5b0c5456e/0/cache/eslint-plugin-prettier-npm-4.2.1-ba8e1240f1-b9e839d233.zip/node_modules/eslint-plugin-prettier/",\
+          "packageDependencies": [\
+            ["eslint-plugin-prettier", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:4.2.1"],\
+            ["@types/eslint", "npm:8.4.6"],\
+            ["@types/eslint-config-prettier", null],\
+            ["@types/prettier", "npm:2.7.0"],\
+            ["eslint", "npm:8.23.1"],\
+            ["eslint-config-prettier", "virtual:1cf4b86a95603e86320c3bb87020db322f342cc221d4db1e79a9bf21f09a5dcef3009fef6c54a9f0b459f10d96be69cf166f89082ab5395acb5564fa6158f49d#npm:8.5.0"],\
+            ["prettier", "npm:2.7.1"],\
+            ["prettier-linter-helpers", "npm:1.0.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/eslint-config-prettier",\
+            "@types/eslint",\
+            "@types/prettier",\
+            "eslint-config-prettier",\
+            "eslint",\
+            "prettier"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["eslint-plugin-react", [\
         ["npm:7.31.8", {\
           "packageLocation": "./.yarn/cache/eslint-plugin-react-npm-7.31.8-54babab916-0683e2a624.zip/node_modules/eslint-plugin-react/",\
@@ -9620,6 +9653,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/fast-deep-equal-npm-3.1.3-790edcfcf5-e21a9d8d84.zip/node_modules/fast-deep-equal/",\
           "packageDependencies": [\
             ["fast-deep-equal", "npm:3.1.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["fast-diff", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/fast-diff-npm-1.2.0-5ba4171bb6-1b5306eaa9.zip/node_modules/fast-diff/",\
+          "packageDependencies": [\
+            ["fast-diff", "npm:1.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -15172,6 +15214,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/prettier-npm-2.7.1-d1f40f5e1a-55a4409182.zip/node_modules/prettier/",\
           "packageDependencies": [\
             ["prettier", "npm:2.7.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["prettier-linter-helpers", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/prettier-linter-helpers-npm-1.0.0-6925131a7e-00ce8011cf.zip/node_modules/prettier-linter-helpers/",\
+          "packageDependencies": [\
+            ["prettier-linter-helpers", "npm:1.0.0"],\
+            ["fast-diff", "npm:1.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\

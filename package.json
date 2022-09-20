@@ -64,6 +64,7 @@
     "@types/testing-library__jest-dom": "^5",
     "@yarnpkg/sdks": "^3.0.0-rc.20",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "latest",
     "eslint-plugin-react-hooks": "latest"
   }
 }
