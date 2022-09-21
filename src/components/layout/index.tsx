@@ -20,7 +20,7 @@ interface LayoutProps {
 
 const LayoutWrapper = styled.div`
   display: flex;
-  margin-left: 227.34px;
+  margin-left: 15vw;
   width: 100%;
   height: 95vh;
 `;
