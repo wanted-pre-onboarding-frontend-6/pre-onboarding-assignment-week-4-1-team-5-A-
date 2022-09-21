@@ -6,13 +6,13 @@
 .pnp.js
 
 .env
-
-
+.yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.eslintcache
 
 # testing
 /coverage
