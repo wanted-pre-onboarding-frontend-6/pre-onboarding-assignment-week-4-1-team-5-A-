@@ -43,7 +43,7 @@ export default function Sider() {
           </ListItemIcon>
           <ListItemText>대시 보드</ListItemText>
         </ListItem>
-        {SIDE_MENU.map(({ id, children }) => (
+        {SIDE_MENU.map(({ id, icon, children }) => (
           <Box key={id} sx={{ bgcolor: '#101F33' }}>
             <ListItem
               sx={{
@@ -56,11 +56,7 @@ export default function Sider() {
               }}
               onClick={() => onChildDropDown(id)}
             >
-              <ListItemIcon>
-                {id === '계좌 목록' && <AccountBalanceOutlinedIcon sx={{ color: 'white' }} />}
-                {id === '사용자' && <AccessibilityNewOutlinedIcon sx={{ color: 'white' }} />}
-                {id === '로그아웃' && <LogoutOutlinedIcon sx={{ color: 'white' }} />}
-              </ListItemIcon>
+              <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
             {childDropDownOpen.some((el) => el === id) &&
@@ -81,25 +77,28 @@ export default function Sider() {
 
 const SIDE_MENU = [
   {
-    id: '계좌 목록',
+    id: '계좌 관리',
+    icon: <AccountBalanceOutlinedIcon sx={{ color: 'white' }} />,
     children: [
       {
-        id: '투자 계좌',
+        id: '계좌 목록',
         active: true,
       },
     ],
   },
   {
-    id: '사용자',
+    id: '사용자 관리',
+    icon: <AccessibilityNewOutlinedIcon sx={{ color: 'white' }} />,
     children: [
       {
-        id: '사용자 관리',
+        id: '사용자 목록',
         active: true,
       },
     ],
   },
   {
     id: '로그아웃',
+    icon: <LogoutOutlinedIcon sx={{ color: 'white' }} />,
   },
 ];
 
