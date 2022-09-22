@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default function Account() {
-  return <Container></Container>;
+  return <Container>기본</Container>;
 }
 
 const Container = styled.div`
