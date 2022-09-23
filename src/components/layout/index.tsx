@@ -1,26 +1,23 @@
-import { ReactNode } from 'react';
 import styled from 'styled-components';
 import Sider from './sider';
 import Footer from './footer';
+import { Outlet } from 'react-router-dom';
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout() {
   return (
     <>
       <LayoutWrapper>
         <Sider />
-        {children}
+        <Outlet />
       </LayoutWrapper>
       <Footer />
     </>
   );
 }
-interface LayoutProps {
-  children: ReactNode;
-}
 
 const LayoutWrapper = styled.div`
   display: flex;
-  margin-left: 227.34px;
+  margin-left: 15vw;
   width: 100%;
   height: 95vh;
 `;

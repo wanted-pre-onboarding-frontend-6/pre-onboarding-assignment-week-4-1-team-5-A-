@@ -2,7 +2,7 @@ import styled from 'styled-components';
 export default function Footer() {
   return (
     <FooterDescWrapper>
-      <FooterDesc>Copyright © December and Company Inc.</FooterDesc>
+      <div>Copyright © December and Company Inc.</div>
     </FooterDescWrapper>
   );
 }
@@ -10,8 +10,7 @@ export default function Footer() {
 const FooterDescWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-left: 120px;
+  margin-left: 100px;
   width: 100%;
   height: 5vh;
 `;
-const FooterDesc = styled.div``;
