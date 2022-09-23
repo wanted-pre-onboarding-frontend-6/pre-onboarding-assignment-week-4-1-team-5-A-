@@ -34,7 +34,7 @@ class BaseApiImpl implements BaseApi {
   async get(
     url: string,
     token: string | null,
-    formData?: string,
+    formData?: string | number,
     headerOption?: AxiosRequestHeaders,
   ) {
     const axios = this.createAxios(token, headerOption);
