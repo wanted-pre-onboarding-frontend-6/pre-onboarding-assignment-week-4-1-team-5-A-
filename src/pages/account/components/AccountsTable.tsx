@@ -32,7 +32,6 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
 
 interface AccountProps {
-  className?: string;
   cryptoOrders: CryptoOrder[];
 }
 

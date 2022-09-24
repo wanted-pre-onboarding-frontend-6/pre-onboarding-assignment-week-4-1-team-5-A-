@@ -20,7 +20,7 @@ class UserApi {
   constructor() {
     this.accessToken = userStorage.get();
     this.http = new Http(
-      process.env.REACT_APP_API_URL,
+      process.env.REACT_APP_BASE_URL,
       this.accessToken ? this.accessToken : undefined,
     );
     this.path = '/users';
