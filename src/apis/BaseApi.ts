@@ -54,6 +54,7 @@ class BaseApiImpl implements BaseApi {
 
   async put<T = any, R = AxiosResponse<T>>(
     url?: string,
+
     data?: T,
     config?: AxiosRequestConfig<T>,
   ): Promise<R> {
@@ -62,6 +63,7 @@ class BaseApiImpl implements BaseApi {
 
   async delete<T = any, R = AxiosResponse<T>>(
     url?: string,
+
     config?: AxiosRequestConfig<T>,
   ): Promise<R> {
     return await this.axios.delete(this.pagePath + url, { ...config });

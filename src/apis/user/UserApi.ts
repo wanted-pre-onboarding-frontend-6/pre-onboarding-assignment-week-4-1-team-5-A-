@@ -5,6 +5,7 @@ class UserApi extends BaseApiImpl implements BaseApi {
   async getUsers() {
     const response = await this.get('');
     return response.data;
+
   }
   // private getUsers(id: number) {
   //   const response = this.axios.get(`${id}`);
