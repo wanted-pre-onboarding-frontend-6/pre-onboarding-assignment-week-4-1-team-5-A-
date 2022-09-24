@@ -13,9 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useInput from '../../hooks/useInput';
-import userApi from '../../apis/user/UserApi';
 import userStorage from '../../utils/userStorage';
 import { palette } from '../../styles/palette';
+import AuthApi from '../../apis/auth/AuthApi';
 
 const theme = createTheme();
 
@@ -26,9 +26,9 @@ export default function Login() {
   const onLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const { data } = await userApi.login({ email, password });
-      userStorage.set(data.accessToken);
-      // window.location.replace(Path.HOME);
+      const { accessToken } = await AuthApi.login({ email, password });
+      userStorage.set(accessToken);
+      window.location.replace('user');
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +50,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           <Box component="form" onSubmit={onLogin} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -87,7 +87,7 @@ export default function Login() {
               variant="contained"
               sx={{ bgcolor: palette.mainColor, mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
               <Grid item xs>
