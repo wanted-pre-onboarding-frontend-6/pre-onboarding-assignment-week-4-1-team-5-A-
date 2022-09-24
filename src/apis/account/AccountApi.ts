@@ -4,11 +4,11 @@ import userStorage from '../../utils/userStorage';
 
 class AccountApi extends BaseApImpl implements BaseApi {
   getAccounts = async () => {
-    const { data } = await this.get();
+    const { data } = await this.get('');
     return data;
   };
-  getAccount = async (params: number) => {
-    const { data } = await this.get({ params: params });
+  getAccount = async (id: number) => {
+    const { data } = await this.get(`${id}`);
     return data;
   };
 }

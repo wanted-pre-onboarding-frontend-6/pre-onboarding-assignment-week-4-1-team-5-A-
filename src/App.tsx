@@ -5,6 +5,7 @@ import { CssBaseline } from '@mui/material';
 import GlobalStyle from './styles/Global';
 import ACCOUNT_PATH from './router/path/Account';
 import USER_PATH from './router/path/User';
+import { RecoilRoot } from 'recoil';
 
 function App() {
   const queryClient = new QueryClient();
@@ -15,7 +16,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <GlobalStyle />
         <CssBaseline />
-        {routes}
+        <RecoilRoot>{routes}</RecoilRoot>
       </QueryClientProvider>
     </ThemeProvider>
   );

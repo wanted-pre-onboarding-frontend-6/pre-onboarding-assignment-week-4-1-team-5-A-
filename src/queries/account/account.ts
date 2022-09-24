@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import AccountApi from '../../apis/account/Account';
+import AccountApi from '../../apis/account/AccountApi';
 
-export default function useGetAccountQuery(param: number) {
-  return useQuery(['accountQuery'], () => AccountApi.getAccount(param), {
+export default function useGetAccountQuery(id: number) {
+  return useQuery(['accountQuery'], () => AccountApi.getAccount(id), {
     retry: false,
     refetchOnWindowFocus: false,
     cacheTime: 1000 * 60 * 30,

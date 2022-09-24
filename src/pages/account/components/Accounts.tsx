@@ -1,38 +1,23 @@
 import { Card } from '@mui/material';
-import Account from './AccountsTable';
+import AccountsTable from './AccountsTable';
 import useGetAccountsQuery from '../../../queries/account/Accounts';
-import { useState } from 'react';
 import Error from '../../error';
 import Loading from '../../../components/loading';
+import { useSetRecoilState } from 'recoil';
+import { accountsState } from '../../../recoil/account/atoms';
+import Account from '../../../apis/account/AccountApi';
 
-function Accounts() {
-  const [accounts, setAccounts] = useState<Accounts[] | []>([]);
+export default function Accounts(): JSX.Element {
+  const setAccountsState = useSetRecoilState(accountsState);
 
-  const { error, isLoading } = useGetAccountsQuery(setAccounts);
+  const { error, isLoading } = useGetAccountsQuery(setAccountsState);
 
   if (error) return <Error />;
   if (isLoading) return <Loading />;
 
   return (
     <Card>
-      <Account cryptoOrders={accounts} />
+      <AccountsTable />
     </Card>
   );
-}
-
-export default Accounts;
-
-export interface Accounts {
-  assets: string;
-  broker_id: string;
-  created_at: string;
-  id: number;
-  is_active: true;
-  name: string;
-  number: string;
-  payments: string;
-  status: number;
-  updated_at: string;
-  user_id: number;
-  uuid: string;
 }
