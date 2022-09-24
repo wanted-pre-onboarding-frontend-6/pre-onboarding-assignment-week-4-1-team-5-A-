@@ -1,6 +1,4 @@
 import { FC, ChangeEvent, useState } from 'react';
-import { format } from 'date-fns';
-import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {
   Tooltip,
@@ -26,68 +24,72 @@ import {
 } from '@mui/material';
 
 import Label from '../../../components/Label';
-import { CryptoOrder, CryptoOrderStatus } from '../../../models/crypto_order';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
+import UserApi from '../../../apis/user/UserApi';
+import { queryKeys } from '../../../utils/constants';
+import { useQuery } from '@tanstack/react-query';
+import { User } from '../../../models/user';
+import UserSettingApi from '../../../apis/user/UserSettingApi';
 
-interface AccountProps {
-  className?: string;
-  cryptoOrders: CryptoOrder[];
+// interface Filters {
+//   status?: IsActive;
+// }
+
+function useUsersQuery() {
+  const { data } = useQuery([queryKeys.USERS], () => UserApi.getUsers(), {
+    cacheTime: 5 * 1000 * 60,
+    staleTime: 5 * 1000 * 60,
+  });
+  return data || [];
+}
+function useUserSettingQuery() {
+  const { data } = useQuery([queryKeys.USERSETTING], () => UserSettingApi.getUserSetting(), {
+    cacheTime: 5 * 1000 * 60,
+    staleTime: 5 * 1000 * 60,
+  });
+  return data || [];
 }
 
-interface Filters {
-  status?: CryptoOrderStatus;
-}
+// const makeUserList = async () => {};
 
-const getStatusLabel = (cryptoOrderStatus: CryptoOrderStatus): JSX.Element => {
-  const map = {
-    failed: {
-      text: 'Failed',
-      color: 'error',
-    },
-    completed: {
-      text: 'Completed',
-      color: 'success',
-    },
-    pending: {
-      text: 'Pending',
-      color: 'warning',
-    },
-  };
-
-  const { text, color }: any = map[cryptoOrderStatus];
-
-  return <Label color={color}>{text}</Label>;
+const getStatusLabel = (IsActive: boolean): JSX.Element => {
+  return IsActive ? <Label color="success">Active</Label> : <Label color="error">Inactive</Label>;
 };
 
-const applyFilters = (cryptoOrders: CryptoOrder[], filters: Filters): CryptoOrder[] => {
-  return cryptoOrders.filter((cryptoOrder) => {
-    let matches = true;
+const applyFilters = (Users: User[], filters: any): User[] => {
+  return Users.filter((user) => {
+    const matches = true;
 
-    if (filters.status && cryptoOrder.status !== filters.status) {
-      matches = false;
-    }
+    // if (filters.status && user.status !== filters.status) {
+    //   matches = false;
+    // }
 
     return matches;
   });
 };
 
-const applyPagination = (
-  cryptoOrders: CryptoOrder[],
-  page: number,
-  limit: number,
-): CryptoOrder[] => {
-  return cryptoOrders.slice(page * limit, page * limit + limit);
+const applyPagination = (Users: User[], page: number, limit: number): User[] => {
+  return Users.slice(page * limit, page * limit + limit);
 };
 
-const Account: FC<AccountProps> = ({ cryptoOrders }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>([]);
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
+function UsersTabel() {
+  // makeUserList();
+  const users = useUsersQuery();
+
+  users.map((user: any) => {
+    user.account_count = 10;
+  });
+
+  console.log(users);
+
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const selectedBulkActions = selectedUsers.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: undefined,
+  const [filters, setFilters] = useState<any>({
+    status: null,
   });
 
   const statusOptions = [
@@ -96,16 +98,11 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
       name: 'All',
     },
     {
-      id: '브로커명',
-      name: '브로커명',
+      id: 'active',
     },
     {
-      id: '계좌 활성화',
-      name: '계좌 활성화',
-    },
-    {
-      id: '계좌 상태',
-      name: '계좌 상태',
+      id: 'sfaff',
+      name: 'staff',
     },
   ];
 
@@ -116,26 +113,21 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
       value = e.target.value;
     }
 
-    setFilters((prevFilters) => ({
+    setFilters((prevFilters: any) => ({
       ...prevFilters,
       status: value,
     }));
   };
 
-  const handleSelectAllCryptoOrders = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSelectedCryptoOrders(
-      event.target.checked ? cryptoOrders.map((cryptoOrder) => cryptoOrder.id) : [],
-    );
+  const handleSelectAllUsers = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedUsers(event.target.checked ? users.map((user: any) => user.id) : []);
   };
 
-  const handleSelectOneCryptoOrder = (
-    event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string,
-  ): void => {
-    if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-      setSelectedCryptoOrders((prevSelected) => [...prevSelected, cryptoOrderId]);
+  const handleSelectOneUsers = (event: ChangeEvent<HTMLInputElement>, UsersId: string): void => {
+    if (!selectedUsers.includes(UsersId)) {
+      setSelectedUsers((prevSelected) => [...prevSelected, UsersId]);
     } else {
-      setSelectedCryptoOrders((prevSelected) => prevSelected.filter((id) => id !== cryptoOrderId));
+      setSelectedUsers((prevSelected) => prevSelected.filter((id) => id !== UsersId));
     }
   };
 
@@ -147,11 +139,10 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredCryptoOrders = applyFilters(cryptoOrders, filters);
-  const paginatedCryptoOrders = applyPagination(filteredCryptoOrders, page, limit);
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 && selectedCryptoOrders.length < cryptoOrders.length;
-  const selectedAllCryptoOrders = selectedCryptoOrders.length === cryptoOrders.length;
+  const filteredUsers = applyFilters(users, filters);
+  const paginatedUsers = applyPagination(filteredUsers, page, limit);
+  const selectedSomeUsers = selectedUsers.length > 0 && selectedUsers.length < users.length;
+  const selectedAllUsers = selectedUsers.length === users.length;
   const theme = useTheme();
 
   return (
@@ -182,7 +173,7 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
               </FormControl>
             </Box>
           }
-          title="투자 계좌"
+          title="유저 목록"
         />
       )}
       <Divider />
@@ -193,35 +184,36 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
-                  checked={selectedAllCryptoOrders}
-                  indeterminate={selectedSomeCryptoOrders}
-                  onChange={handleSelectAllCryptoOrders}
+                  checked={selectedAllUsers}
+                  indeterminate={selectedSomeUsers}
+                  onChange={handleSelectAllUsers}
                 />
               </TableCell>
               <TableCell>고객명</TableCell>
-              <TableCell>브로커명</TableCell>
-              <TableCell>계좌번호</TableCell>
-              <TableCell>계좌상태</TableCell>
-              <TableCell>계좌명</TableCell>
-              <TableCell>평가금액</TableCell>
-              <TableCell>입금금액</TableCell>
-              <TableCell>계좌활성화여부</TableCell>
-              <TableCell>계좌개설일</TableCell>
+              <TableCell>보유중인 계좌수</TableCell>
+              <TableCell>이메일 주소</TableCell>
+              <TableCell>성별코드</TableCell>
+              <TableCell>생년월일</TableCell>
+              <TableCell>휴대폰 번호</TableCell>
+              <TableCell>최근로그인</TableCell>
+              <TableCell>혜택 수신 동의 여부</TableCell>
+              <TableCell>활성화 여부</TableCell>
+              <TableCell>가입일</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedCryptoOrders.map((cryptoOrder) => {
-              const isCryptoOrderSelected = selectedCryptoOrders.includes(cryptoOrder.id);
+            {paginatedUsers.map((user) => {
+              const isUsersSelected = selectedUsers.includes(user.id);
               return (
-                <TableRow hover key={cryptoOrder.id} selected={isCryptoOrderSelected}>
+                <TableRow hover key={user.id} selected={isUsersSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
-                      checked={isCryptoOrderSelected}
+                      checked={isUsersSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        handleSelectOneCryptoOrder(event, cryptoOrder.id)
+                        handleSelectOneUsers(event, user.id)
                       }
-                      value={isCryptoOrderSelected}
+                      value={isUsersSelected}
                     />
                   </TableCell>
                   <TableCell>
@@ -232,10 +224,7 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.orderDetails}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {format(cryptoOrder.orderDate, 'MMMM dd yyyy')}
+                      {user.name}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -246,7 +235,7 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.orderID}
+                      {user.account_count}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -257,10 +246,62 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.sourceName}
+                      {user.email}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {cryptoOrder.sourceDesc}
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      color="text.primary"
+                      gutterBottom
+                      noWrap
+                    >
+                      {user.gender_origin}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      color="text.primary"
+                      gutterBottom
+                      noWrap
+                    >
+                      {user.birth_date.substring(0, 10)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      color="text.primary"
+                      gutterBottom
+                      noWrap
+                    >
+                      {user.phone_number}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      color="text.primary"
+                      gutterBottom
+                      noWrap
+                    >
+                      {user.last_login.substring(0, 10)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      color="text.primary"
+                      gutterBottom
+                      noWrap
+                    >
+                      true
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -271,14 +312,9 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.amountCrypto}
-                      {cryptoOrder.cryptoCurrency}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {numeral(cryptoOrder.amount).format(`${cryptoOrder.currency}0,0.00`)}
+                      false
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">{getStatusLabel(cryptoOrder.status)}</TableCell>
                   <TableCell align="right">
                     <Tooltip title="Edit Order" arrow>
                       <IconButton
@@ -316,7 +352,7 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={filteredUsers.length}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleLimitChange}
           page={page}
@@ -326,14 +362,14 @@ const Account: FC<AccountProps> = ({ cryptoOrders }) => {
       </Box>
     </Card>
   );
+}
+
+UsersTabel.propTypes = {
+  Users: PropTypes.array.isRequired,
 };
 
-Account.propTypes = {
-  cryptoOrders: PropTypes.array.isRequired,
+UsersTabel.defaultProps = {
+  Users: [],
 };
 
-Account.defaultProps = {
-  cryptoOrders: [],
-};
-
-export default Account;
+export default UsersTabel;

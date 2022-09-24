@@ -1,0 +1,10 @@
+import userStorage from '../../utils/userStorage';
+import BaseApiImpl, { BaseApi } from '../BaseApi';
+
+class UserApi extends BaseApiImpl implements BaseApi {
+  async getUsers() {
+    const response = await this.get('');
+    return response.data;
+  }
+}
+export default new UserApi(userStorage.get(), '/users');

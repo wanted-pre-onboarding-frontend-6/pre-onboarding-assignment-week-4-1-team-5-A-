@@ -1,14 +1,12 @@
 export const palette = {
   // Primary
   mainColor: '#091E3B',
-  // subColor: '#222222',
-  // blackColor: '#000000',
-  // redColor: '#F24E1E',
-  // fontColor: '#ffffff',
-  // fontSubColor: '#999999',
+  subColor: '#FFFFFF',
+  background: '#E6F1F0',
+  fontColor: '#505050',
+  fontSubColor: '#999999',
   error: '#EB5757',
-  // subError: '#FFBA52',
-  // blueColor: '#0969da',
+  subError: '#FFBA52',
 
   // Gray
   gray100: '#F1F1F4',
