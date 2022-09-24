@@ -1,49 +1,70 @@
-import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export interface BaseApi {
-  createAxios?(token: string, headerOption?: AxiosRequestHeaders): AxiosInstance;
+  get?<T = any, R = AxiosResponse<T>>(url?: string, config?: AxiosRequestConfig<T>): Promise<R>;
 
-  get?(
-    url: string,
-    token: string,
-    formData: string,
-    headerOption?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<any, any>>;
+  post?<T = any, R = AxiosResponse<T>>(
+    url?: string,
+    data?: T,
+    config?: AxiosRequestConfig<T>,
+  ): Promise<R>;
 
-  post?(
-    url: string,
-    data: string,
-    token: string,
-    headerOption?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<any, any>>;
+  put?<T = any, R = AxiosResponse<T>>(
+    url?: string,
+    data?: T,
+    config?: AxiosRequestConfig<T>,
+  ): Promise<R>;
+
+  delete?<T = any, R = AxiosResponse<T>>(url?: string, config?: AxiosRequestConfig<T>): Promise<R>;
 }
 
+export type PAGE_PATH = string;
+type Token = string | null;
+
 class BaseApiImpl implements BaseApi {
-  createAxios(token: string | null, headerOption?: AxiosRequestHeaders) {
-    return axios.create({
+  axios: AxiosInstance;
+  pagePath: PAGE_PATH;
+
+  constructor(token: Token, pagePath: PAGE_PATH) {
+    this.axios = Axios.create({
       baseURL: process.env.REACT_APP_BASE_URL,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
-        ...headerOption,
       },
     });
+    this.pagePath = pagePath;
   }
 
-  async get(
+  async get<T = any, R = AxiosResponse<T>>(
     url: string,
-    token: string | null,
-    formData?: string,
-    headerOption?: AxiosRequestHeaders,
-  ) {
-    const axios = this.createAxios(token, headerOption);
-    return await axios.get(url, { params: formData });
+    config?: AxiosRequestConfig<T>,
+  ): Promise<R> {
+    return await this.axios.get(this.pagePath + url, { ...config });
   }
 
-  async post(url: string, data: string, token: string, headerOption?: AxiosRequestHeaders) {
-    const axios = this.createAxios(token, headerOption);
-    return await axios.post(url, data);
+  async post<T = any, R = AxiosResponse<T>>(
+    url?: string,
+    data?: T,
+    config?: AxiosRequestConfig<T>,
+  ): Promise<R> {
+    return await this.axios.post(url ? this.pagePath + url : this.pagePath, data, { ...config });
+  }
+
+  async put<T = any, R = AxiosResponse<T>>(
+    url?: string,
+    data?: T,
+    config?: AxiosRequestConfig<T>,
+  ): Promise<R> {
+    return await this.axios.put(this.pagePath + url, data, { ...config });
+  }
+
+  async delete<T = any, R = AxiosResponse<T>>(
+    url?: string,
+    config?: AxiosRequestConfig<T>,
+  ): Promise<R> {
+    return await this.axios.delete(this.pagePath + url, { ...config });
   }
 }
 
