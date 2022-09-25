@@ -47,8 +47,9 @@ export default function AccountsTable() {
   if (isLoading) return <Loading />;
 
   const findUserName = (id: number): string => {
-    const userName = data?.find((el: { id: number }) => el.id === id).name;
-    return userName;
+    const userName = data?.find((el: { id: number }) => el.id === id);
+    const parsedUserName = userName.name;
+    return parsedUserName;
   };
 
   const handlePageChange = (event: any, newPage: number): void => {
