@@ -19,5 +19,5 @@ const LayoutWrapper = styled.div`
   display: flex;
   margin-left: 15vw;
   width: 100%;
-  height: 95vh;
+  height: 95%;
 `;

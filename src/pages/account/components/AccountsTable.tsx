@@ -1,14 +1,12 @@
-import { ChangeEvent, useState } from 'react';
-import { format } from 'date-fns';
-import numeral from 'numeral';
-
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Account } from '../../../types/AccountType';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {
   Divider,
   Box,
   FormControl,
   InputLabel,
   Card,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -22,11 +20,57 @@ import {
   CardHeader,
 } from '@mui/material';
 
-import { useRecoilValue } from 'recoil';
-import { accountsState } from '../../../recoil/account/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/Atoms';
+import useGetSearchQuery from '../../../queries/account/Search';
+import { filteredAccounts } from '../../../recoil/account/Selectors';
+import useGetUsersQuery from '../../../queries/user/Users';
 
 export default function AccountsTable() {
-  const accounts = useRecoilValue(accountsState);
+  const [page, setPage] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(5);
+  const [accountsFilterOption, setAccountsFilterOption] = useRecoilState(accountsFilterOptionState);
+  const navigagte = useNavigate();
+
+  const accounts = useRecoilValue(filteredAccounts);
+  const searchValue = useRecoilValue(searchValueState);
+
+  const { refetch } = useGetSearchQuery({ params: { q: searchValue } });
+  const { data } = useGetUsersQuery();
+  const paginatedAccounts = applyPagination(accounts, page, limit);
+
+  useEffect(() => {
+    refetch();
+  }, [searchValue, refetch]);
+
+  const findUserName = (id: number): string => {
+    const userName = data?.find((el: { id: number }) => el.id === id).name;
+    return userName;
+  };
+
+  const handlePageChange = (event: any, newPage: number): void => {
+    setPage(newPage);
+  };
+
+  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setLimit(parseInt(event.target.value));
+  };
+
+  const handleOptionChange = (e: { target: { value: string } }): void => {
+    let value = 'all';
+
+    if (e.target.value !== 'all') {
+      value = e.target.value;
+    }
+
+    setAccountsFilterOption(value);
+  };
+  const goToUser = (id: number) => {
+    navigagte(`/user/${id}`);
+  };
+  const goToAccount = (id: number) => {
+    navigagte(`/account/${id}`);
+  };
 
   return (
     <Card>
@@ -35,10 +79,15 @@ export default function AccountsTable() {
           <Box width={150}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>정렬</InputLabel>
-              <Select label="Status" autoWidth>
-                {filterOptions.map((filterOption) => (
-                  <MenuItem key={filterOption.id} value={filterOption.id}>
-                    {filterOption.name}
+              <Select
+                onChange={handleOptionChange}
+                value={accountsFilterOption}
+                label="정렬"
+                autoWidth
+              >
+                {Options.map((Option) => (
+                  <MenuItem key={Option.id} value={Option.id}>
+                    {Option.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -47,15 +96,12 @@ export default function AccountsTable() {
         }
         title="투자 계좌"
       />
-
       <Divider />
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox color="primary" />
-              </TableCell>
+              <TableCell padding="checkbox"></TableCell>
               <TableCell>고객명</TableCell>
               <TableCell>브로커명</TableCell>
               <TableCell>계좌번호</TableCell>
@@ -68,13 +114,11 @@ export default function AccountsTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {accounts.map((account) => {
+            {paginatedAccounts.map((account) => {
               return (
-                <TableRow hover key={account.id}>
-                  <TableCell padding="checkbox">
-                    <Checkbox color="primary" />
-                  </TableCell>
-                  <TableCell>
+                <TableRow hover key={account.updated_at}>
+                  <TableCell padding="checkbox"></TableCell>
+                  <TableCell onClick={() => goToUser(account.user_id)} sx={{ cursor: 'pointer' }}>
                     <Typography
                       variant="body1"
                       fontWeight="bold"
@@ -82,7 +126,7 @@ export default function AccountsTable() {
                       gutterBottom
                       noWrap
                     >
-                      {account.user_id}
+                      {findUserName(account.user_id)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       name
@@ -102,7 +146,7 @@ export default function AccountsTable() {
                       broker
                     </Typography>
                   </TableCell>
-                  <TableCell>
+                  <TableCell onClick={() => goToAccount(account.id)} sx={{ cursor: 'pointer' }}>
                     <Typography
                       variant="body1"
                       fontWeight="bold"
@@ -148,7 +192,14 @@ export default function AccountsTable() {
                     <Typography
                       variant="body1"
                       fontWeight="bold"
-                      color="text.primary"
+                      sx={{
+                        color:
+                          account.assets > account.payments
+                            ? 'red'
+                            : account.assets === account.payments
+                            ? 'black'
+                            : 'blue',
+                      }}
                       gutterBottom
                       noWrap
                     >
@@ -204,12 +255,21 @@ export default function AccountsTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box p={2}>{/* <TablePagination /> */}</Box>
+      <Box p={2}>
+        <TablePagination
+          component="div"
+          count={accounts.length}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleLimitChange}
+          page={page}
+          rowsPerPage={limit}
+          rowsPerPageOptions={[5, 10, 25, 30]}
+        />
+      </Box>
     </Card>
   );
 }
-
-const filterOptions = [
+const Options = [
   {
     id: 'all',
     name: 'All',
@@ -226,4 +286,11 @@ const filterOptions = [
     id: '계좌 상태',
     name: '계좌 상태',
   },
+  {
+    id: '검색',
+    name: '검색',
+  },
 ];
+const applyPagination = (accounts: Account[], page: number, limit: number): Account[] => {
+  return accounts.slice(page * limit, page * limit + limit);
+};

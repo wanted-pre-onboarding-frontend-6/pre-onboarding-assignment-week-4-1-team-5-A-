@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useParamString } from '../../../hooks/useParamString';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -11,15 +13,40 @@ import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import userStorage from '../../../utils/userStorage';
 
 export default function Sider() {
   const [childDropDownOpen, setchildDropDownOpen] = useState<string[]>([]);
+  const [userList, setUserList] = useState(false);
+  const [accountList, setAccountList] = useState(false);
+  const navigate = useNavigate();
+  const { LIST_PATH } = useParamString();
+
+  useEffect(() => {
+    if (LIST_PATH === 'user') {
+      setUserList(true);
+      setAccountList(false);
+    }
+    if (LIST_PATH === 'account') {
+      setAccountList(true);
+      setUserList(false);
+    }
+  }, [LIST_PATH]);
 
   const onChildDropDown = (id: string): void => {
     if (childDropDownOpen.some((el) => el === id))
       return setchildDropDownOpen((prev) => prev.filter((el) => el !== id));
 
     setchildDropDownOpen((prev) => [...prev, id]);
+  };
+
+  const goToAccounts = () => {
+    navigate('/account');
+    setAccountList(true);
+  };
+  const goToUsers = () => {
+    navigate('/user');
+    setUserList(true);
   };
 
   return (
@@ -29,7 +56,7 @@ export default function Sider() {
           sx={{
             ...MAIN_SX_PROPS,
             ...SUB_SX_PROPS,
-            fontSize: 22,
+            fontSize: 33,
             color: '#fff',
             bgcolor: '#101F33',
             textAlign: 'center',
@@ -53,20 +80,51 @@ export default function Sider() {
                 cursor: 'pointer',
                 pt: '10px',
                 pb: '10px',
+                fontSize: 33,
               }}
-              onClick={() => onChildDropDown(id)}
+              onClick={() => {
+                if (id === '로그아웃') {
+                  userStorage.remove();
+                  navigate('/');
+                }
+                onChildDropDown(id);
+              }}
             >
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
             {childDropDownOpen.some((el) => el === id) &&
-              children?.map(({ id: childId }) => (
-                <ListItem disablePadding key={childId}>
-                  <ListItemButton sx={{ ...MAIN_SX_PROPS, pl: '50px' }}>
-                    <ListItemText sx={{ textAlign: 'right', pr: '30px' }}>{childId}</ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              children?.map(({ id: childId }) =>
+                childId === '계좌 목록' ? (
+                  <ListItem
+                    disablePadding
+                    key={childId}
+                    onClick={goToAccounts}
+                    sx={{
+                      height: '50px',
+                      backgroundColor: userList ? '' : 'rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    <ListItemButton sx={{ ...MAIN_SX_PROPS, pl: '50px', height: '50px' }}>
+                      <ListItemText sx={{ textAlign: 'right', pr: '30px' }}>{childId}</ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                ) : (
+                  <ListItem
+                    disablePadding
+                    key={childId}
+                    onClick={goToUsers}
+                    sx={{
+                      height: '50px',
+                      backgroundColor: accountList ? '' : 'rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    <ListItemButton sx={{ ...MAIN_SX_PROPS, pl: '50px', height: '50px' }}>
+                      <ListItemText sx={{ textAlign: 'right', pr: '30px' }}>{childId}</ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                ),
+              )}
             <Divider />
           </Box>
         ))}
