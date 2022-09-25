@@ -12,5 +12,5 @@ const FooterDescWrapper = styled.div`
   justify-content: center;
   margin-left: 100px;
   width: 100%;
-  height: 5vh;
+  height: 5%;
 `;

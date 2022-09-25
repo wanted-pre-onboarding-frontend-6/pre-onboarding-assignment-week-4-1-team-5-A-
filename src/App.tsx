@@ -3,19 +3,22 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ThemeProvider from './theme/ThemeProvider';
 import { CssBaseline } from '@mui/material';
 import GlobalStyle from './styles/Global';
-import ACCOUNT_PATH from './router/path/Account';
-import USER_PATH from './router/path/User';
+import { RecoilRoot } from 'recoil';
+import userStorage from './utils/userStorage';
+import Routes from './router';
 
 function App() {
   const queryClient = new QueryClient();
-  const routes = useRoutes([...ACCOUNT_PATH, ...USER_PATH]);
+  const token = userStorage.get();
+  const isAuth = token !== null ? true : false;
+  const routes = useRoutes(Routes(isAuth));
 
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <GlobalStyle />
         <CssBaseline />
-        {routes}
+        <RecoilRoot>{routes}</RecoilRoot>
       </QueryClientProvider>
     </ThemeProvider>
   );

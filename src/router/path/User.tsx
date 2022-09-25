@@ -2,22 +2,22 @@ import UserDetail from '../../pages/userDetail';
 import Layout from '../../components/layout';
 import { RouteObject } from 'react-router';
 import Login from '../../pages/login';
+import { Navigate } from 'react-router-dom';
 import UserList from '../../pages/user';
 
-const USER_PATH: RouteObject[] = [
-  {
-    path: '/',
-    element: <Login />,
-    children: [{}],
-  },
-  {
-    path: '/user',
-    element: <Layout />,
-    children: [
-      { path: '', element: <UserList /> },
-      { path: ':id', element: <UserDetail /> },
-    ],
-  },
-];
-
-export default USER_PATH;
+export default function USER_PATH(isAuth: boolean): RouteObject[] {
+  return [
+    {
+      path: '/',
+      element: <Login />,
+    },
+    {
+      path: '/user',
+      element: isAuth ? <Layout /> : <Navigate to="/" replace />,
+      children: [
+        { path: '', element: <UserList /> },
+        { path: ':id', element: <UserDetail /> },
+      ],
+    },
+  ];
+}

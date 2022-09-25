@@ -33,7 +33,7 @@ import useSettingUser from '../../../queries/user/useSettingUser';
 import { UserList } from '../../../types/user';
 import accountApi from '../../../apis/account/accountApi';
 import Pagenation from '../../../components/Pagenation/Pagenation';
-import userApi from '../../../apis/user/userApi';
+import UsersApi from '../../../apis/user/UsersApi';
 
 function UsersTabel() {
   const [page, onChagePage, setPage] = useInput(1);
@@ -105,7 +105,7 @@ function UsersTabel() {
       uuidPramse.append('uuid', uuid);
     }
 
-    userApi
+    UsersApi
       // 데이터의 쿼리화 후 api 전송
       .getList({ paramsSerializer: uuidPramse.toString() })
       .then((res: any) => {
@@ -207,8 +207,7 @@ function UsersTabel() {
   // update delete
 
   const onUpdateUser = (id: number, newName: string) => {
-    userApi
-      .updateUser({ id, newName })
+    UsersApi.updateUser({ id, newName })
       .then((res: any) => {
         setUserList((prev: any) => prev.map((user: any) => (user.user.id === id ? res : user)));
       })
@@ -217,8 +216,7 @@ function UsersTabel() {
       });
   };
   const onDeleteUser = (id: number) => {
-    userApi
-      .deleteUser(id)
+    UsersApi.deleteUser(id)
       .then((res: any) => {
         setUserList((prev: any) => prev.filter((user: any) => user.user.id !== id));
       })
@@ -235,8 +233,7 @@ function UsersTabel() {
   const onAddUser = () => {
     console.log(email, password);
     const params = { data: { email, password, id: email } };
-    userApi
-      .addUser(params)
+    UsersApi.addUser(params)
       .then((res: any) => {
         setUserList((prev: any) => prev.concat(res));
       })
