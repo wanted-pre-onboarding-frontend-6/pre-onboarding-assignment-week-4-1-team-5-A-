@@ -12,7 +12,7 @@ export default function Accountdetail() {
   const { data, isLoading, isError } = useGetAccountQuery(id as string);
 
   const findUserName = (id: number): string => {
-    const userName = users?.data.find((el: { id: number }) => el.id === id).name;
+    const userName = users.data.find((el: { id: number }) => el.id === id).name;
     return userName;
   };
 
