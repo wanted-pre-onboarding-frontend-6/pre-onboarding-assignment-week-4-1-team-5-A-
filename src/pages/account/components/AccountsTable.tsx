@@ -25,6 +25,7 @@ import useGetSearchQuery from '../../../queries/account/Search';
 import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/atoms';
 import { filteredAccounts } from '../../../recoil/account/Selectors';
 import useGetUsersQuery from '../../../queries/user/Users';
+import Loading from '../../../components/loading';
 
 export default function AccountsTable() {
   const [page, setPage] = useState<number>(0);
@@ -36,17 +37,18 @@ export default function AccountsTable() {
   const searchValue = useRecoilValue(searchValueState);
 
   const { refetch } = useGetSearchQuery({ params: { q: searchValue } });
-  const { data } = useGetUsersQuery();
+  const { data, isLoading } = useGetUsersQuery();
   const paginatedAccounts = applyPagination(accounts, page, limit);
 
   useEffect(() => {
     refetch();
   }, [searchValue, refetch]);
 
+  if (isLoading) return <Loading />;
+
   const findUserName = (id: number): string => {
     const userName = data?.find((el: { id: number }) => el.id === id);
-    const parsedUserName = userName.name;
-    return parsedUserName;
+    return userName;
   };
 
   const handlePageChange = (event: any, newPage: number): void => {
