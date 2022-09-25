@@ -29,7 +29,7 @@ export default function Login() {
       const { accessToken, user } = await AuthApi.login({ email, password });
       userStorage.set(accessToken);
       userStorage.setUser(user);
- 
+
       window.location.replace('user');
     } catch (error) {
       console.log(error);
