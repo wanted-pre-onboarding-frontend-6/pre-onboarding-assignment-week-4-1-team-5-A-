@@ -4,8 +4,8 @@ import AccountApi from '../../apis/account/AccountApi';
 import { Account } from '../../types/AccountType';
 import BROKERS from '../../pages/account/asset/Broker.json';
 import STATUS from '../../pages/account/asset/Status.json';
+import { searchAccountsState } from '../../recoil/account/atoms';
 import { useSetRecoilState } from 'recoil';
-import { searchAccountsState } from '../../recoil/account/Atoms';
 
 export default function useGetSearchQuery(searchparams: AxiosRequestConfig) {
   const setSearchAccounts = useSetRecoilState(searchAccountsState);

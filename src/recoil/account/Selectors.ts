@@ -1,5 +1,5 @@
+import { accountsFilterOptionState, accountsState, searchAccountsState } from './atoms';
 import { selector } from 'recoil';
-import { accountsFilterOptionState, accountsState, searchAccountsState } from './Atoms';
 
 export const filteredAccounts = selector({
   key: 'filteredAccounts',
