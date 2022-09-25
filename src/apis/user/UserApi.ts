@@ -3,8 +3,8 @@ import BaseApiImpl, { BaseApi } from '../BaseApi';
 
 class UserApi extends BaseApiImpl implements BaseApi {
   async getUsers() {
-    const response = await this.get('');
-    return response.data;
+    const { data } = await this.get('');
+    return data;
   }
   async getUserById(id: number) {
     const { data } = await this.get(`/${id}`);

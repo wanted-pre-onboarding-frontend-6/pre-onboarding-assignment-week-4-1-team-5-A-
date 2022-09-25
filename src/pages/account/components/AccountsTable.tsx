@@ -47,7 +47,7 @@ export default function AccountsTable() {
   if (isLoading) return <Loading />;
 
   const findUserName = (id: number): string => {
-    const userName = data?.find((el: { id: number }) => el.id === id);
+    const userName = data?.find((el: { id: number }) => el.id === id).name;
     return userName;
   };
 

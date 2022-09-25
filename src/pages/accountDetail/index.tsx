@@ -23,12 +23,14 @@ export default function Accountdetail() {
     <Container>
       <Table>
         <thead>
-          <Category>사용자 이름</Category>
-          <Data>{findUserName(data.user_id)}</Data>
-          <Category>브로커명</Category>
-          <Data>{data.broker_id}</Data>
-          <Category>계좌 상태</Category>
-          <Data>{data.status}</Data>
+          <tr>
+            <Category>사용자 이름</Category>
+            <Data>{findUserName(data.user_id)}</Data>
+            <Category>브로커명</Category>
+            <Data>{data.broker_id}</Data>
+            <Category>계좌 상태</Category>
+            <Data>{data.status}</Data>
+          </tr>
         </thead>
         <tbody>
           <tr>
