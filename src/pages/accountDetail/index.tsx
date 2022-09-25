@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Loading from '../../components/loading';
-import useGetAccountQuery from '../../queries/account/Account';
+import useGetAccountQuery from '../../queries/account/account';
 import useGetUsersQuery from '../../queries/user/Users';
 import Error from '../error';
 
