@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Account } from '../../../types/AccountType';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Divider,
   Box,
@@ -44,8 +44,9 @@ export default function AccountsTable() {
   }, [searchValue, refetch]);
 
   const findUserName = (id: number): string => {
-    const userName = data?.find((el: { id: number }) => el.id === id).name;
-    return userName;
+    const userName = data?.find((el: { id: number }) => el.id === id);
+    const parsedUserName = userName.name;
+    return parsedUserName;
   };
 
   const handlePageChange = (event: any, newPage: number): void => {
