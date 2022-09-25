@@ -1,20 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
-import { SetterOrUpdater } from 'recoil';
+import { AxiosRequestConfig } from 'axios';
 import AccountApi from '../../apis/account/AccountApi';
 import { Account } from '../../types/AccountType';
 import BROKERS from '../../pages/account/asset/Broker.json';
 import STATUS from '../../pages/account/asset/Status.json';
+import { useSetRecoilState } from 'recoil';
+import { searchAccountsState } from '../../recoil/account/Atoms';
 
-export default function useGetAccountsQuery(setdata: SetterOrUpdater<Account[]>) {
-  return useQuery(['accountsQuery'], () => AccountApi.getAccounts(), {
+export default function useGetSearchQuery(searchparams: AxiosRequestConfig) {
+  const setSearchAccounts = useSetRecoilState(searchAccountsState);
+
+  return useQuery(['getSearchQuery'], () => AccountApi.getAccounts(searchparams), {
     retry: false,
     refetchOnWindowFocus: false,
     cacheTime: 1000 * 60 * 30,
     onError: (err) => {
       console.log(err, 'err');
     },
-    onSuccess: (data: Account[]): void => {
-      data.map((el) => {
+    enabled: !!searchparams?.params.q,
+    onSuccess: (data) => {
+      data.map((el: Account) => {
         el.broker_id = BROKER_ID[el.broker_id];
         el.status = ACCOUNT_STATUS[el.status];
         el.assets = Number(el.assets).toLocaleString();
@@ -22,7 +27,7 @@ export default function useGetAccountsQuery(setdata: SetterOrUpdater<Account[]>)
         el.number = maskingFunc(el.number);
         el.is_active = el.is_active ? '활성화' : '비활성화';
       });
-      setdata(data);
+      setSearchAccounts(data);
     },
   });
 }

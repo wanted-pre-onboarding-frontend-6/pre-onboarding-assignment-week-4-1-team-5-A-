@@ -17,7 +17,21 @@ const userStorage = {
   },
   remove() {
     localStorage.removeItem(USER_STORAGE_KEY);
+    localStorage.removeItem('user');
+  },
+  setUser(user: user) {
+    localStorage.setItem('user', JSON.stringify(user));
+  },
+  getUser() {
+    const user = localStorage.getItem('user');
+    const parsedUser = JSON.parse(user as string);
+    return parsedUser;
   },
 };
 
 export default userStorage;
+
+interface user {
+  email: string;
+  id: string;
+}

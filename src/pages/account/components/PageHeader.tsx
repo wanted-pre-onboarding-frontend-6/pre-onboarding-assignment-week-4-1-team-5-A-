@@ -1,10 +1,17 @@
-import { Typography, Button, Grid } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Typography, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { useSetRecoilState } from 'recoil';
+import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/Atoms';
 
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+export default function PageHeader() {
+  const setSearchValue = useSetRecoilState(searchValueState);
+  const setAccountsFilterOption = useSetRecoilState(accountsFilterOptionState);
 
-function PageHeader() {
+  const onSearchValue = (e: { target: { value: string | ((currVal: string) => string) } }) => {
+    setSearchValue(e.target.value);
+    setAccountsFilterOption('검색');
+  };
+
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
@@ -14,10 +21,8 @@ function PageHeader() {
         <Typography variant="subtitle2">these are all accounts</Typography>
       </Grid>
       <Grid item>
-        <TextField label="검색" id="search" />
+        <TextField label="검색" id="search" onChange={onSearchValue} />
       </Grid>
     </Grid>
   );
 }
-
-export default PageHeader;
