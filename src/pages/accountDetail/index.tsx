@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Loading from '../../components/loading';
-import useGetAccountQuery from '../../queries/account/Account';
 import useGetUsersQuery from '../../queries/user/Users';
+import useGetAccountQuery from '../../queries/account/account';
 import Error from '../error';
 
 export default function Accountdetail() {
