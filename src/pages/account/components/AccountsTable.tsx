@@ -21,8 +21,8 @@ import {
 } from '@mui/material';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/Atoms';
 import useGetSearchQuery from '../../../queries/account/Search';
+import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/atoms';
 import { filteredAccounts } from '../../../recoil/account/Selectors';
 import useGetUsersQuery from '../../../queries/user/Users';
 

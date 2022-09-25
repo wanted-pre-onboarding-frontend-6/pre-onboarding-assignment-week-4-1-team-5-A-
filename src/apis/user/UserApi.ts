@@ -10,5 +10,6 @@ class UserApi extends BaseApiImpl implements BaseApi {
     const { data } = await this.get(`/${id}`);
     return data;
   }
+
 }
 export default new UserApi(userStorage.get(), '/users');
