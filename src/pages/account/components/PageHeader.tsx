@@ -1,7 +1,7 @@
 import { Typography, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/atoms';
 import { useSetRecoilState } from 'recoil';
-import { accountsFilterOptionState, searchValueState } from '../../../recoil/account/Atoms';
 
 export default function PageHeader() {
   const setSearchValue = useSetRecoilState(searchValueState);
