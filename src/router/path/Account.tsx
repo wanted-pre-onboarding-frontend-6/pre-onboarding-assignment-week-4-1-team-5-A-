@@ -1,4 +1,4 @@
-import AccountList from '../../pages/account';
+import AccountList from '../../pages/user';
 import AccoutDetail from '../../pages/accountDetail';
 import Layout from '../../components/layout';
 import { RouteObject } from 'react-router';

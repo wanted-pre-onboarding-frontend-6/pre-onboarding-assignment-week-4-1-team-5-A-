@@ -11,4 +11,4 @@ class UserApi extends BaseApiImpl implements BaseApi {
     return data;
   }
 }
-export default new UserApi(userStorage.get(), '/users');
+export default new UserApi(userStorage.get(), 'users');
