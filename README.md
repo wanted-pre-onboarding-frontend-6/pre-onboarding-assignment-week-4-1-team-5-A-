@@ -14,6 +14,10 @@
 
 https://investment-management-fe-5.netlify.app/
 
+`test id: test@test.com`
+
+`password: test`
+
 <br />
 
 ## 📌 프로젝트 설치 및 시작
